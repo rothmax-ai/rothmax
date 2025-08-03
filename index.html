@@ -44,7 +44,16 @@
 						</ul>
 					</nav>
 				</header>
+<input type="number" id="agi" placeholder="Enter AGI">
+<button onclick="showBracket()">Calculate</button>
+<p id="output"></p>
 
+<script>
+function showBracket() {
+    let agi = document.getElementById('agi').value;
+    document.getElementById('output').innerText = "Your bracket: 22% (demo)";
+}
+</script>
 			<!-- Banner -->
 				<section id="banner">
 					<div class="content">
@@ -217,4 +226,5 @@
 	</body>
 
 </html>
+
 
