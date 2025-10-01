@@ -1,0 +1,11 @@
+# Domain logic
+/src/domain/       @your-username
+
+# State & feature flags
+/src/state/        @your-username
+
+# UI & components
+/src/ui/           @your-username
+
+# Tests
+/tests/            @your-username
