@@ -1,11 +1,25 @@
-# Domain logic
-/src/domain/       @rothmax-ai
+# --- DOMAIN LAYERS ---
 
-# State & feature flags
-/src/state/        @rothmax-ai
+# Core tax domain logic (math, rules, calculations)
+# Chief Tax Strategist (CTS) + Domain Author
+/src/domain/       @rothmax-ai @ai-cts @ai-domain
 
-# UI & components
-/src/ui/           @rothmax-ai
+# State & feature flag scaffolding
+# State Author + Orchestrator
+/src/state/        @rothmax-ai @ai-state @ai-orchestrator
+
+# UI components & presentation
+# UI Author + Customer/UX AI
+/src/ui/           @rothmax-ai @ai-ui @ai-customer
 
 # Tests
-/tests/            @rothmax-ai
+# Test Engineer + Reviewer
+/tests/            @rothmax-ai @ai-test @ai-reviewer
+
+# --- PROJECT META ---
+
+# Workflows and automation
+/.github/          @rothmax-ai @ai-orchestrator
+
+# Documentation
+/docs/             @rothmax-ai @ai-po @ai-reviewer
