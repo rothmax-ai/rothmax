@@ -1,0 +1,98 @@
+name: Orchestrator – Apply Patch & Open PR
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  apply-patch:
+    if: contains(github.event.comment.body, '/apply-patch')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Parse comment
+        id: meta
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.comment.body;
+
+            function readField(name) {
+              const m = body.match(new RegExp(name + ':\\s*([^\\n]+)'));
+              return m ? m[1].trim() : '';
+            }
+
+            const branch = readField('branch') || `orchestrator-${Date.now()}`;
+            const title  = readField('title')  || 'Orchestrator PR';
+            const mBody  = body.match(/body:\\s*([\\s\\S]*?)\\npatch:/);
+            const prBody = mBody ? mBody[1].trim() : '';
+            const patch  = body.split('patch:').slice(1).join('patch:').trim();
+
+            if (!patch || !patch.includes('*** Begin Patch')) {
+              core.setFailed('No patch found after `patch:` or missing *** Begin Patch marker.');
+            }
+
+            core.setOutput('branch', branch);
+            core.setOutput('title', title);
+            core.setOutput('prbody', prBody);
+            core.setOutput('patch', patch);
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config user.name  "ai-orchestrator"
+          git config user.email "ai-orchestrator@users.noreply.github.com"
+          git checkout -b "${{ steps.meta.outputs.branch }}"
+
+      - name: Write patch to file
+        run: |
+          cat > /tmp/patch.diff <<'PATCH'
+          ${{ steps.meta.outputs.patch }}
+          PATCH
+
+      - name: Apply patch
+        run: |
+          set -e
+          git apply --index -p0 /tmp/patch.diff
+          git commit -m "orchestrator: apply patch"
+
+      - name: Push branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git push --set-upstream "https://${GH_TOKEN}@github.com/${{ github.repository }}.git" "${{ steps.meta.outputs.branch }}"
+
+      - name: Open Pull Request
+        id: openpr
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '${{ steps.meta.outputs.title }}',
+              head: '${{ steps.meta.outputs.branch }}',
+              base: 'main',
+              body: '${{ steps.meta.outputs.prbody }}'
+            });
+            core.setOutput('url', pr.data.html_url);
+
+      - name: Comment with PR link
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ Opened PR: ${{ steps.openpr.outputs.url }}`
+            });
