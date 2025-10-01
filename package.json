@@ -1,0 +1,10 @@
+{
+  "name": "rothmax",
+  "private": true,
+  "scripts": {
+    "lint": "echo \"no lint defined\"",
+    "typecheck": "echo \"no types yet\"",
+    "test": "echo \"no tests yet\"",
+    "build": "echo \"no build yet\""
+  }
+}
