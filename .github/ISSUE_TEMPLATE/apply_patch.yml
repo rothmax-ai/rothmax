@@ -1,0 +1,23 @@
+name: Apply Patch Request
+description: Standardized patch request for Orchestrator workflow
+title: "[Patch] "
+body:
+  - type: textarea
+    id: branch
+    attributes:
+      label: Branch name
+      description: e.g. feat/my-feature
+  - type: textarea
+    id: title
+    attributes:
+      label: PR Title
+  - type: textarea
+    id: body
+    attributes:
+      label: PR Body
+  - type: textarea
+    id: patch
+    attributes:
+      label: Patch Content
+      description: Paste unified diff between *** Begin Patch / *** End Patch here, inside fenced code block
+      render: shell
