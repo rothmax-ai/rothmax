@@ -1,11 +1,11 @@
 # Domain logic
-/src/domain/       @your-username
+/src/domain/       @rothmax-ai
 
 # State & feature flags
-/src/state/        @your-username
+/src/state/        @rothmax-ai
 
 # UI & components
-/src/ui/           @your-username
+/src/ui/           @rothmax-ai
 
 # Tests
-/tests/            @your-username
+/tests/            @rothmax-ai
