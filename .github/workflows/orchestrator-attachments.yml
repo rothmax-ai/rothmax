@@ -1,0 +1,144 @@
+name: Orchestrator – Apply Patch (Attachments OK)
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  apply-patch:
+    if: contains(github.event.comment.body, '/apply-patch')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Read comment body & attachments
+        id: meta
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.issue.number;
+            const commentBody = context.payload.comment.body || '';
+
+            // Helper to read 'field: value' lines from a block (branch/title/body)
+            function readField(name, src) {
+              const m = src.match(new RegExp('^' + name + ':\\s*(.+)$', 'm'));
+              return m ? m[1].trim() : '';
+            }
+
+            // Get issue with possible attachments
+            const issue = await github.rest.issues.get({ owner, repo, issue_number });
+            const hasAttachments = /\.(patch|txt)$/i.test(JSON.stringify(issue.data.body || '')) || false;
+
+            // Try to find an attachment link in the issue body
+            let attachmentUrl = '';
+            const attachmentRegex = /(https?:\/\/\S+\.(?:patch|txt))/i;
+            const body = issue.data.body || '';
+            const m = body.match(attachmentRegex);
+            if (m) attachmentUrl = m[1];
+
+            // Fall back to the latest comment if the file was attached in a comment
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            for (const c of comments.reverse()) {
+              const mm = (c.body || '').match(attachmentRegex);
+              if (mm) { attachmentUrl = mm[1]; break; }
+            }
+
+            // Fields from comment body (works for both pasted and attached patch flows)
+            const branch = readField('branch', commentBody) || readField('branch', issue.data.body || '') || `orchestrator-${Date.now()}`;
+            const title  = readField('title', commentBody)  || readField('title', issue.data.body || '')  || 'Orchestrator PR';
+            const prBody = readField('body', commentBody)   || readField('body', issue.data.body || '')   || '';
+
+            core.setOutput('branch', branch);
+            core.setOutput('title', title);
+            core.setOutput('prbody', prBody);
+            core.setOutput('attachmentUrl', attachmentUrl);
+            core.setOutput('commentBody', commentBody);
+
+      - name: Configure git
+        run: |
+          git config user.name  "ai-orchestrator"
+          git config user.email "ai-orchestrator@users.noreply.github.com"
+          git checkout -b "${{ steps.meta.outputs.branch }}"
+
+      - name: Resolve patch source (attachment OR comment)
+        id: patchsrc
+        run: |
+          echo "source=comment" >> $GITHUB_OUTPUT
+          if [ -n "${{ steps.meta.outputs.attachmentUrl }}" ]; then
+            echo "source=attachment" > $GITHUB_OUTPUT
+          fi
+
+      - name: Download patch attachment (if present)
+        if: steps.patchsrc.outputs.source == 'attachment'
+        run: |
+          echo "Downloading patch from: ${{ steps.meta.outputs.attachmentUrl }}"
+          curl -L "${{ steps.meta.outputs.attachmentUrl }}" -o /tmp/patch.diff
+          ls -l /tmp/patch.diff
+          head -n 20 /tmp/patch.diff || true
+
+      - name: Write patch from comment (fallback)
+        if: steps.patchsrc.outputs.source == 'comment'
+        run: |
+          # Extract the block after 'patch:' from the comment body into /tmp/patch.diff
+          python3 - <<'PY'
+          import os,sys,re,base64,json
+          body = os.environ.get("COMMENT_BODY","")
+          m = re.search(r'patch:\s*([\s\S]+)$', body, re.M)
+          if not m:
+            print("No patch block found in comment")
+            sys.exit(1)
+          patch = m.group(1).strip()
+          open("/tmp/patch.diff","w").write(patch)
+          print("Wrote /tmp/patch.diff")
+          PY
+        env:
+          COMMENT_BODY: ${{ steps.meta.outputs.commentBody }}
+
+      - name: Apply patch
+        run: |
+          set -e
+          echo "Applying patch..."
+          git apply --index -p0 /tmp/patch.diff || (echo "git apply failed"; exit 1)
+          git commit -m "orchestrator: apply patch"
+
+      - name: Push branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git push --set-upstream "https://${GH_TOKEN}@github.com/${{ github.repository }}.git" "${{ steps.meta.outputs.branch }}"
+
+      - name: Open Pull Request
+        id: openpr
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '${{ steps.meta.outputs.title }}',
+              head: '${{ steps.meta.outputs.branch }}',
+              base: 'main',
+              body: '${{ steps.meta.outputs.prbody }}'
+            });
+            core.setOutput('url', pr.data.html_url);
+
+      - name: Comment with PR link
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ Opened PR: ${{ steps.openpr.outputs.url }}`
+            });
