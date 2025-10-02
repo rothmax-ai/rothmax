@@ -1,0 +1,338 @@
+/* Apple SF system stack + clean base */
+:root{
+  --txt:#111827;
+  --muted:#4b5563;
+  --border:#000000;   /* strong black border like your mock */
+  --blue:#007aff;     /* iOS blue */
+  --bg:#ffffff;
+}
+
+html,body{
+  margin:0; padding:20px; background:var(--bg); color:var(--txt);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container */
+.wrap{ max-width:680px; margin:28px auto 64px; padding:0 16px; }
+
+/* Header */
+.brand{
+  text-align:center; font-weight:700; font-size:28px; letter-spacing:.25px;
+  margin:6px 0 24px;
+}
+
+/* Labels + inputs (match mock) */
+.field{ margin:26px 0 18px; }
+.label{ font-size:40px; font-weight:800; margin-bottom:12px; line-height:1.05; }
+
+.control{
+  width:100%;
+  font-size:36px; line-height:1.2;
+  padding:18px 20px;
+  border:2px solid var(--border);
+  border-radius:14px;
+  outline:none; background:#fff; box-sizing:border-box;
+}
+.control:focus{ box-shadow:0 0 0 3px rgba(0,0,0,.08); }
+
+select.control{
+  -webkit-appearance:none; appearance:none;
+  background-image:
+    linear-gradient(45deg,transparent 50%,var(--border) 50%),
+    linear-gradient(135deg,var(--border) 50%,transparent 50%),
+    linear-gradient(to right,transparent,transparent);
+  background-position:
+    calc(100% - 26px) calc(50% - 7px),
+    calc(100% - 18px) calc(50% - 7px),
+    calc(100% - 52px) .7em;
+  background-size:8px 8px,8px 8px,1px 2.6em;
+  background-repeat:no-repeat;
+}
+
+/* Card for text summary (optional) */
+.card{ margin:18px 0 6px; padding:16px 18px; border:1px solid #e5e7eb; border-radius:12px; background:#fff; }
+.card h3{ margin:0 0 6px; font-size:20px; font-weight:700; }
+.card p{ margin:6px 0; color:var(--muted); }
+
+/* Bracket bar visuals */
+
+.bracket-bar{ display:flex; gap:8px; align-items:stretch; }
+.brk{
+  flex:1; text-align:center; padding:10px 0;
+  border:1px solid #d1d5db; border-radius:6px; background:#fff;
+  font-weight:600; font-size:18px; transition:.15s;
+}
+.brk.active{ background:#e5e7eb; border-color:#9ca3af; }
+
+/* “You are here” bubble */
+.tip{
+  position:absolute; top:-34px; left:0; transform:translateX(-50%);
+  background:var(--blue); color:#fff; font-weight:700;
+  padding:6px 10px; border-radius:6px; font-size:14px; display:none; white-space:nowrap;
+}
+.tip:after{
+  content:""; position:absolute; left:50%; bottom:-6px; transform:translateX(-50%);
+  width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid var(--blue);
+}
+
+
+.bracket-bar {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.brk {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.brk.active {
+  background: #e5e7eb;    /* light gray highlight */
+  border-color: #9ca3af;
+}
+
+/* "You are here" bubble */
+.tip {
+  position: absolute;
+  top: -34px;
+  left: 0;
+  transform: translateX(-50%);
+  background: #1d4ed8;
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: none;
+  white-space: nowrap;
+}
+
+.tip:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #1d4ed8;
+}
+
+
+/* Convert message card — mock parity */
+.convert-card{
+  margin: 28px 0 8px;          /* more air above the bar */
+  text-align: center;
+  max-width: 680px;            /* keep lines readable on desktop */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.convert-line1,
+.convert-line2,
+.convert-sub{
+  font-size: 22px;             /* up from 18px */
+  line-height: 1.28;
+  color: #111827;
+  margin: 2px 0;
+}
+
+.convert-savings{
+  font-size: 88px;             /* big hero number */
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #2563eb;
+  margin: 14px 0 10px;
+}
+
+#convertAmount{
+  font-weight: 800;            /* match headline weight inside line1 */
+}
+
+/* canonical bracket bar spacing */
+.bar-wrap{
+  position: relative;
+  margin: 64px 0 24px;   /* more air under Filing Status, room before convert card */
+}
+
+/* keep if you added it previously */
+.card { margin-top: 18px; }
+
+@media (max-width: 420px){
+  .bar-wrap{ margin: 56px 0 20px; }
+  .convert-savings{ font-size: 60px; }
+}
+
+/* === Tiny CSS polish === */
+.bar-wrap {
+  margin: 56px 20px;
+}
+.convert-savings {
+  font-size: 66px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: #2563eb;
+}
+
+/* === Capital Gains panel (blue card) === */
+.gains-card {
+  background: #2563eb;
+  color: #fff;
+  padding: 22px 18px;
+  border-radius: 14px;
+  text-align: center;
+  margin: 22px auto 0;
+  max-width: 900px;
+}
+
+/* Headline / subhead in the blue card (match mockup) */
+.cap-gains-headline {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+.cap-gains-subhead {
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+
+/* Row that holds BOTH inputs side-by-side */
+.cap-gains-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: nowrap;                /* keep them side-by-side on desktop */
+}
+
+/* Each input “field” */
+.cap-gains-item {
+  flex: 1 1 0;
+  min-width: 280px;                 /* enough to stay side-by-side */
+  max-width: 420px;
+  text-align: left;
+}
+.cap-gains-item .label {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;                  /* same scale as other labels */
+  margin-bottom: 6px;
+  color: #fff;                      /* label over blue */
+}
+.cap-gains-item .control {
+  width: 100%;
+  height: 56px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  background: #fff;
+  color: #000;
+}
+
+/* Stack on small screens only */
+@media (max-width: 820px) {
+  .cap-gains-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+}
+
+/* === Taxes Over Lifetime section === */
+#taxesLifetimeChart {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+section.wrap h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 6px 0 8px;
+  text-align: center;
+}
+
+.chartjs-tooltip {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+#taxesLifetimeChart + .chartjs-size-monitor ~ div {
+  font-size: 12px;
+  font-weight: 500;
+  color: #444;
+}
+
+.threshold-label {
+  font-size: 12px;
+  font-style: italic;
+  color: #777;
+}
+
+/* Constrain chart width and height */
+.chart-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+#taxesLifetimeChart {
+  width: 100% !important;     /* fill container width */
+  height: 220px !important;   /* fixed, sane height */
+  display: block;
+  background: #fff;
+}
+
+.assumptions-card p {
+  margin: 4px 0;
+  font-size: 16px;
+  color: #4a5568; /* Matches Tax Bracket body text */
+}
+
+.assumptions-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.disclaimer-banner {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  color: #111827; /* same black as lifetime savings number */
+  margin-top: 4px;
+  margin-bottom: 32px;
+  text-transform: uppercase;
+}
+
+.bottom-banner {
+  padding-top: 12px;
+}
+
+.footer-links {
+  text-align: center;
+  font-size: 16px;
+  color: #111827;
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
+
+.footer-links a {
+  color: #111827;
+  text-decoration: underline;
+  margin: 0 8px;
+}
