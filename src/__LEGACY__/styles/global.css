@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #fafafa;
+  color: #111;
+}
+
+.rmx-card {
+  padding: 24px;
+  margin: 20px 0;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}

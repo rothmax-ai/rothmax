@@ -1,0 +1,10 @@
+import { jsx as _jsx } from "react/jsx-runtime";
+import React, { useState } from 'react';
+function SidebarLinkGroup({ children, activecondition, }) {
+    const [open, setOpen] = useState(activecondition);
+    const handleClick = () => {
+        setOpen(!open);
+    };
+    return (_jsx("li", { className: `pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r ${activecondition && 'from-violet-500/12] dark:from-violet-500/24] to-violet-500/4]'}`, children: children(handleClick, open) }));
+}
+export default SidebarLinkGroup;

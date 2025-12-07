@@ -1,0 +1,5 @@
+"use client";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export default function InfoPanel() {
+    return (_jsxs("div", { className: "p-3 rounded-xl bg-white shadow-sm border border-gray-200", children: [_jsx("h2", { className: "text-xl font-semibold text-gray-900 mb-3", children: "What is RothMax?" }), _jsx("p", { className: "text-sm text-gray-600 leading-relaxed mt-2", children: "RothMax is a free, educational retirement tax simulator. It shows how your ordinary income tax brackets, IRMAA tiers, Social Security taxation, and Required Minimum Distributions evolve over time." }), _jsx("p", { className: "text-sm text-gray-600 leading-relaxed mt-2", children: "RothMax uses IRS-accurate mechanics: ordinary tax rates, MAGI rules, IRMAA step functions, Social Security taxable income formulas, and official RMD tables." }), _jsx("p", { className: "text-sm text-gray-600 leading-relaxed mt-3", children: "RothMax runs entirely in your browser. No servers, no tracking, and no stored personal data." }), _jsx("div", { className: "clear-both" })] }));
+}

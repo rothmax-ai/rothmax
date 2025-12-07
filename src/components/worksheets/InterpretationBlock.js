@@ -1,0 +1,6 @@
+"use client";
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { formatPercent } from "../../utils";
+export default function InterpretationBlock({ marginalRate, }) {
+    return (_jsxs(_Fragment, { children: [_jsxs("div", { children: [_jsx("h4", { className: "text-base font-semibold mb-2", children: "What This Means For You" }), _jsxs("p", { className: "text-sm text-gray-700 leading-relaxed", children: ["You are currently in the ", formatPercent(marginalRate), " bracket. Roth conversions allow you to intentionally \u201Cfill up\u201D this bracket before spilling into the next one. If you expect higher tax rates in future years due to RMDs, Social Security, or IRMAA surcharges, carefully using your remaining headroom can smooth out lifetime taxes."] })] }), _jsxs("div", { children: [_jsx("h4", { className: "text-base font-semibold mb-2", children: "Why It Works This Way" }), _jsx("p", { className: "text-sm text-gray-700 leading-relaxed", children: "Only income within a bracket is taxed at that bracket\u2019s rate. Moving into a higher bracket does not increase taxes on income that has already been taxed at lower rates. This worksheet shows how your income and Roth conversions flow through brackets in layers, not as a single flat tax." })] })] }));
+}
