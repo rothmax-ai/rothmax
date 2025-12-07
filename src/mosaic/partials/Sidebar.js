@@ -69,7 +69,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, variant = "defaul
     return (_jsxs("div", { className: "min-w-fit", children: [_jsx("div", { className: `fixed inset-0 bg-gray-900/30 z-40 lg:hidden transition-opacity duration-200 ${sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"}` }), _jsxs("div", { id: "sidebar", ref: sidebar, className: `flex flex-col z-40 left-0 top-0
         lg:static lg:left-auto lg:top-auto lg:translate-x-0
         h-dvh overflow-y-scroll lg:overflow-y-auto no-scrollbar
-        w-64 lg:w-20 lg:sidebar-expanded:w-64! 2xl:w-64 shrink-0
+        min-w-56 lg:min-w-20 lg:sidebar-expanded:min-w-56 shrink-0
         bg-white dark:bg-gray-800 p-4 rounded-r-2xl shadow-xs
         transition-all duration-200 ease-in-out
         ${sidebarOpen ? "translate-x-0" : "-translate-x-64"}

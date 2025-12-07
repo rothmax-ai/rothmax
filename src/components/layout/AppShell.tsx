@@ -24,11 +24,9 @@ export default function AppShell({ children }: AppShellProps) {
       <div className="flex flex-col flex-1 min-w-0 overflow-y-auto">
 
         {/* CONTENT should NOT be max-w-4xl here */}
-        <main className="p-6 w-full flex justify-center">
-          <div className="w-full px-4 max-w-[1400px]">
+          <main className="p-6 w-full">
             {children}
-          </div>
-        </main>
+          </main>
 
         {/* FOOTER */}
         <footer className="py-10 text-center text-gray-600 text-xs space-y-2">
