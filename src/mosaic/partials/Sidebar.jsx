@@ -112,9 +112,9 @@ export default function Sidebar({
       /* SLIDE-IN BEHAVIOR */
       fixed top-0 left-0
       transform transition-transform duration-300 ease-in-out
-      ${sidebarOpen 
-      ? "translate-x-0 pointer-events-auto" 
-      : "-translate-x-full pointer-events-none"}
+      ${sidebarOpen
+      ? "translate-x-0 pointer-events-auto"
+      : "-translate-x-full pointer-events-none lg:translate-x-0 lg:pointer-events-auto"}
 
       ${variant === "v2" ? "border-r border-gray-200 dark:border-gray-700/60" : ""}
     `}
