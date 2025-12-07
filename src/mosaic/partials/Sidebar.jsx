@@ -73,30 +73,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   ----------------------------- */
   return (
     <>
-      {/* MOBILE BACKDROP */}
-      <div
-        className={`
-          fixed inset-0 bg-black/40 transition-opacity duration-200
-          lg:hidden z-900
-          ${sidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
-        `}
-        onClick={() => setSidebarOpen(false)}
-      />
-
       {/* SIDEBAR WRAPPER */}
       <aside
-          ref={sidebarRef}
-          className={`
-            fixed top-0 left-0
-            h-screen
-            ${widthClass}
-            bg-white dark:bg-gray-800 shadow-lg
-            transition-all duration-300 ease-in-out
-            flex flex-col
-            z-1000
-            translate-x-0
-          `}
-        >
+  ref={sidebarRef}
+  className={`
+    h-screen
+    ${widthClass}             
+    bg-white dark:bg-gray-800 shadow-lg
+    transition-all duration-300 ease-in-out
+    flex flex-col
+    shrink-0              /* <-- CRITICAL: sidebar always takes its width */
+  `}
+>
 
         {/* 🟡 COLLAPSED MODE — Lantern Only */}
         {!sidebarOpen && (
