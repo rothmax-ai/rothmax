@@ -93,18 +93,18 @@ export default function Sidebar({
 
       {/* SIDEBAR PANEL */}
        <div
-      id="sidebar"
-      ref={sidebar}
-      className={`flex flex-col z-40 left-0 top-0
-        lg:static lg:left-auto lg:top-auto lg:translate-x-0
-        h-dvh overflow-y-scroll lg:overflow-y-auto no-scrollbar
-        w-64 lg:w-20 lg:sidebar-expanded:w-64! 2xl:w-64 shrink-0
-        bg-white dark:bg-gray-800 p-4 rounded-r-2xl shadow-xs
-        transition-all duration-200 ease-in-out
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-64"}
-        ${variant === "v2" ? "border-r border-gray-200 dark:border-gray-700/60" : ""}
-      `}
-       >
+          id="sidebar"
+          ref={sidebar}
+          className={`flex flex-col z-40 left-0 top-0
+            lg:static lg:left-auto lg:top-auto lg:translate-x-0
+            h-dvh overflow-y-scroll lg:overflow-y-auto no-scrollbar
+            w-52 md:w-56 lg:w-64 shrink-0
+            bg-white dark:bg-gray-800 p-4 rounded-r-2xl shadow-xs
+            transition-all duration-200 ease-in-out
+            ${sidebarOpen ? "translate-x-0" : "-translate-x-64"}
+            ${variant === "v2" ? "border-r border-gray-200 dark:border-gray-700/60" : ""}
+          `}
+        >
         {/* HEADER */}
         <div className="flex justify-between mb-2 pr-3 sm:px-2">
           {/* Close button (mobile) */}

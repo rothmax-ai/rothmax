@@ -12,7 +12,7 @@ export default function AppShell({ children }: AppShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+    <div className="flex min-h-screen w-full bg-gray-50">
 
       {/* SIDEBAR (fixed column, scrolls independently) */}
       <Sidebar
@@ -25,7 +25,7 @@ export default function AppShell({ children }: AppShellProps) {
 
         {/* CONTENT should NOT be max-w-4xl here */}
         <main className="p-6 w-full flex justify-center">
-          <div className="w-full max-w-4xl">
+          <div className="w-full px-4 max-w-[1400px]">
             {children}
           </div>
         </main>
