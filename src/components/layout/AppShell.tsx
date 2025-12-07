@@ -21,7 +21,7 @@ export default function AppShell({ children }: AppShellProps) {
         <main className="p-6 w-full">
           {/* MOBILE MENU BUTTON — ALWAYS VISIBLE */}
           <button
-            className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-white shadow-md border border-gray-200"
+            className="lg:hidden fixed top-4 left-4 z-9999 p-3 rounded-xl bg-white shadow-md border border-gray-200"
             onClick={() => setSidebarOpen(true)}
           >
             <svg
