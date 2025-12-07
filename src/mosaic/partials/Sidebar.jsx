@@ -85,17 +85,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
       {/* SIDEBAR WRAPPER */}
       <aside
-        ref={sidebarRef}
-        className={`
-          fixed lg:static top-0 left-0
-          h-screen lg:h-screen
-          ${widthClass}                       /* expanded or collapsed */
-          bg-white dark:bg-gray-800 shadow-lg
-          transition-all duration-300 ease-in-out
-          flex flex-col
-          z-1000
-        `}
-      >
+          ref={sidebarRef}
+          className={`
+            fixed top-0 left-0
+            h-screen
+            ${widthClass}
+            bg-white dark:bg-gray-800 shadow-lg
+            transition-all duration-300 ease-in-out
+            flex flex-col
+            z-1000
+            translate-x-0
+          `}
+        >
 
         {/* 🟡 COLLAPSED MODE — Lantern Only */}
         {!sidebarOpen && (

@@ -27,7 +27,14 @@ export default function AppShell({ children }: AppShellProps) {
 
       {/* MAIN CONTENT */}
       <div className="flex flex-col flex-1 min-w-0 overflow-y-auto relative z-0">
-        <main className="p-6 w-full">{children}</main>
+        <main 
+          className={`
+            p-6 w-full transition-all duration-300
+            ${sidebarOpen ? "ml-80 lg:ml-64" : "ml-18"}
+          `}
+        >
+          {children}
+        </main>
 
         {/* FOOTER */}
         <footer className="py-10 text-center text-gray-600 text-xs space-y-2">
