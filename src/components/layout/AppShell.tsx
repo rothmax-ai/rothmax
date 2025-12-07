@@ -19,32 +19,26 @@ export default function AppShell({ children }: AppShellProps) {
       {/* MAIN CONTENT AREA */}
       <div className="flex flex-col flex-1 min-w-0 overflow-y-auto">
         <main className="p-6 w-full">
-          {/* MOBILE NAV TOGGLE BUTTON */}
-          <div className="mb-4 flex items-center lg:hidden">
-            <button
-              className="p-3 -ml-3 text-gray-600"
-              onClick={() => setSidebarOpen(true)}
+          {/* MOBILE MENU BUTTON — ALWAYS VISIBLE */}
+          <button
+            className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-white shadow-md border border-gray-200"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6 text-gray-700"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-7 h-7"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-            </button>
-
-            <span className="ml-1 text-sm font-semibold text-gray-700">
-              Inputs & Worksheets
-            </span>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 6h18M3 12h18M3 18h18"
+              />
+            </svg>
+          </button>
 
           {children}
         </main>
