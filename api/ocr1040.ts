@@ -10,17 +10,19 @@
 // NOTE: Front-end will be responsible for reading the uploaded file,
 //       converting to base64, and POSTing JSON. (Phase 3 UI.)
 
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import OpenAI from "openai";
 
-import { OCR_SYSTEM_PROMPT } from "../src/ocr/prompt";
-import { validateExtracted1040 } from "../src/ocr/validator";
-import type { Extracted1040 } from "../src/ocr/types";
+import { OCR_SYSTEM_PROMPT } from "../src/ocr/prompt.js";
+import { validateExtracted } from "../src/ocr/validator.js";
+import type { Extracted1040 } from "../src/ocr/types.js";
+
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+
 
 // ---------- CONFIG ----------
 
-const MAX_BYTES = 1_000_000; // 1 MB
-const MAX_CALLS_PER_DAY = 3;
+const MAX_BYTES = 2_000_000; // 1 MB
+const MAX_CALLS_PER_DAY = 10;
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -63,8 +65,8 @@ function checkRateLimit(ip: string): { ok: boolean; retryAfterSeconds?: number }
 async function readRequestBody(req: VercelRequest): Promise<string> {
   return await new Promise((resolve, reject) => {
     let data = "";
-    req.on("data", (chunk) => {
-      data += chunk;
+    req.on("data", (chunk: Buffer) => {
+        data += chunk;
     });
     req.on("end", () => resolve(data));
     req.on("error", reject);
@@ -74,7 +76,7 @@ async function readRequestBody(req: VercelRequest): Promise<string> {
 // ---------- HANDLER ----------
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  try {
+    try {
     // 1. Method check
     if (req.method !== "POST") {
       res.setHeader("Allow", "POST");
@@ -93,8 +95,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // 3. Parse JSON body
     const rawBody = await readRequestBody(req);
-    let body: any;
-    try {
+    let body: Record<string, unknown>;    try {
+
       body = JSON.parse(rawBody);
     } catch {
       return res.status(400).json({ error: "Invalid JSON" });
@@ -191,14 +193,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // 8. Validate & normalize into Extracted1040
     let extracted: Extracted1040;
     try {
-      extracted = validateExtracted1040(rawExtracted);
-    } catch (err: any) {
-      console.error("validateExtracted1040 error:", err);
-      return res.status(500).json({
-        error: "Failed to validate OCR output",
-        details: err?.message ?? String(err),
-      });
-    }
+      extracted = validateExtracted(rawExtracted);
+    } catch (err) {
+        console.error("Unexpected error in /api/ocr1040:", err);
+        const details = err instanceof Error ? err.message : String(err);
+        return res.status(500).json({
+          error: "Internal server error",
+          details,
+        });
+      }
 
     // 9. Success — return sanitized Extracted1040
     return res.status(200).json({
@@ -206,11 +209,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       fileName: fileName ?? null,
       extracted,
     });
-  } catch (err: any) {
-    console.error("Unexpected error in /api/ocr1040:", err);
-    return res.status(500).json({
-      error: "Internal server error",
-      details: err?.message ?? String(err),
-    });
-  }
+    } catch (err) {
+      console.error("Unexpected error in /api/ocr1040:", err);
+      const details = err instanceof Error ? err.message : String(err);
+      return res.status(500).json({
+        error: "Internal server error",
+        details,
+      });
+    }
 }

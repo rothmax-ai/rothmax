@@ -16,6 +16,6 @@
     // ⭐ THIS FIXES YOUR ERROR
     "noEmit": true
   },
-  "include": ["src"],
+  "include": ["src", "api"],
   "exclude": ["src/mosaic", "src/mosaic/**/*"]
 }

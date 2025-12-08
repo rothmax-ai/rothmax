@@ -9,13 +9,14 @@ export function validateExtracted(raw: unknown): Extracted1040 {
 
   return {
     taxYear: typeof obj.taxYear === "number" ? obj.taxYear : null,
+
     filingStatus:
       obj.filingStatus === "single" ||
       obj.filingStatus === "mfj" ||
       obj.filingStatus === "mfs" ||
       obj.filingStatus === "hoh" ||
       obj.filingStatus === "qw"
-        ? obj.filingStatus
+      ? (obj.filingStatus as Extracted1040["filingStatus"])
         : null,
 
     wages: Number(obj.wages) || null,
